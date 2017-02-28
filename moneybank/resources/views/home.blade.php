@@ -8,7 +8,8 @@
             <div class="panel panel-default">
                 <div class="panel-heading">Сводка</div>
                 <div class="panel-body">
-                    You are logged in!
+                    <i class="fa fa-money" aria-hidden="true"></i>
+                    21 025
                 </div>
             </div>
         </div>
