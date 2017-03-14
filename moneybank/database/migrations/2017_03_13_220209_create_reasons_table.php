@@ -17,7 +17,8 @@ class CreateReasonsTable extends Migration
             $table->increments('id');
             $table->integer("parent_id", false, true)->nullable();
             $table->integer("user_id", false, true)->references('id')->on('reasons')->onDelete('cascade');
-            $table->foreign('id_parent')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('parent_id')->references('id')->on('users')->onDelete('cascade');
+            $table->enum('type', array('income', 'expense'));
             $table->string("name");
         });
     }

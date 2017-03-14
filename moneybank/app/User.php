@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'account_id'
     ];
 
     /**
@@ -26,4 +26,23 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public static function createWithAccount($data) {
+        $Account = Account::create([
+            'debit'=>0,
+            'credit'=>0
+        ]);
+        $data['account_id'] = $Account->id;
+        $User = parent::create($data);
+        return $User;
+    }
+
+    /**
+     * Аккаунт пользователя
+     *
+     * @return Account
+     */
+    public function Account() {
+        return Account::find($this->account_id);
+    }
 }
