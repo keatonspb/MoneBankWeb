@@ -7,9 +7,19 @@
         <div class="col-lg-3">
             <div class="panel panel-default">
                 <div class="panel-heading">Аккаунт</div>
-                <div class="panel-body">
-                    <i class="fa fa-money" aria-hidden="true"></i> {{ $Account->credit }}
-                </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <div><i class="fa fa-money" aria-hidden="true"></i> {{ number_format($Account->debit, 2, ".", " ") }}</div>
+                            <div class="help-block">На общем счете</div>
+                        </li>
+                        <li class="list-group-item">
+                            <div><i class="fa fa-credit-card" aria-hidden="true"></i> {{ number_format($Account->credit, 2, ".", " ") }}</div>
+                            <div class="help-block">Кредит</div>
+                        </li>
+
+                    </ul>
+
+
             </div>
         </div>
         <div class="col-lg-9">

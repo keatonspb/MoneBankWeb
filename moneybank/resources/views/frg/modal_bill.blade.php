@@ -9,11 +9,17 @@
             <form method="get" class="bill_form" action="/api/bill">
                 <input type="hidden" class="bill_type" name="type" value=""/>
                 <div class="modal-body">
+                    <div class="alert alert-danger" style="display: none;"></div>
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label>Сумма</label>
                                 <input class="form-control" name="sum" value="0" type="number"/>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="credit" value="1"> в кредит
+                                </label>
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -28,6 +34,11 @@
 
                                 </select>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <textarea class="form-control" name="description"></textarea>
                         </div>
                     </div>
                 </div>

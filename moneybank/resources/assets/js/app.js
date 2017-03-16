@@ -49,13 +49,16 @@ $(document).ready(function () {
 
     $(".bill_form").ajaxForm({
             beforeSubmit: function () {
+                $(".bill_form .alert").hide();
                 $(".bill_form button").attr("disabled", "disabled");
             },
             dataType: "json",
             success: function (json) {
                 $(".bill_form button").removeAttr("disabled", "disabled");
-                if(json.success == true) {
+                if(json.success) {
                     location.href = location.href;
+                } else {
+                    $(".bill_form .alert").html(json.message).show();
                 }
             }
         }
