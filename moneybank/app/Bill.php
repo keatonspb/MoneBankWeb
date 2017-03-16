@@ -47,4 +47,5 @@ class Bill extends Model
             throw $e;
         }
     }
+
 }
