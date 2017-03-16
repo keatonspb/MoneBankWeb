@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Account;
+use App\Reason;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,8 +27,10 @@ class HomeController extends Controller
     public function index()
     {
         $Account = Account::getCurrentAccount();
+        $reasons = Reason::whereNull('parent_id')->get();
         return view('home', [
-            'Account'=>$Account
+            'Account'=>$Account,
+            'reasons' => $reasons
         ]);
     }
 }

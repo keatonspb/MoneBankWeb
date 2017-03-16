@@ -20,17 +20,19 @@
                         <div class="col-lg-6">
                             <h5><i class="fa fa-minus-circle" aria-hidden="true"></i>
                                  Затраты</h5>
-                            <ul class="list-group">
+
+                            <button class="btn btn-danger btn-block add_bill" data-role="expense"><i class="fa fa-minus-circle" aria-hidden="true"></i> Потратить</button>
+                            <ul class="list-group" style="margin-top: 10px;">
                                 <li class="list-group-item">Cras justo odio</li>
                                 <li class="list-group-item">Dapibus ac facilisis in</li>
                                 <li class="list-group-item">Morbi leo risus</li>
                                 <li class="list-group-item">Porta ac consectetur ac</li>
                                 <li class="list-group-item">Vestibulum at eros</li>
                             </ul>
-                            <a href="/bill/expenses" class="pull-right" style="margin: -10px 0 10px 0;">Все затраты</a>
 
-                            <button class="btn btn-danger btn-block add_bill" data-role="expense" v-on:click="addBill('expense')"><i class="fa fa-minus-circle" aria-hidden="true"></i> Потратить</button>
+                            <a href="/bill/expenses" class="pull-right" style="margin: -10px 0 10px 0;">Все затраты</a>
                             @include('frg/modal_bill')
+
 
                         </div>
                         <div class="col-lg-6">

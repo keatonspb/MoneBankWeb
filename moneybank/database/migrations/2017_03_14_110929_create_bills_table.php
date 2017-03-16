@@ -21,6 +21,7 @@ class CreateBillsTable extends Migration
             $table->integer("reason_id", false, true)->references('id')->on('reasons')->onDelete('set null');
             $table->enum('type', array('income', 'expense'));
             $table->decimal("value", 10, 2);
+            $table->text("desctiption");
         });
     }
 
