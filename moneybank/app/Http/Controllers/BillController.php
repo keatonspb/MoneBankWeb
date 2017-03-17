@@ -17,7 +17,7 @@ class BillController extends InnerPageController
 {
     public function index(Request $request) {
         $Account = Account::getCurrentAccount();
-        $Bills = new Bill();
+        $Bills = Bill::where("account_id", $Account->id);
         $Bills = $Bills->join('reasons', 'reason_id', '=', 'reasons.id')->select('bills.*', 'reasons.name as reason_name');
         $filter = [];
         if($request->get("start")) {
