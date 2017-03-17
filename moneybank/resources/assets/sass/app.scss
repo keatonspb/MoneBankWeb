@@ -18,6 +18,9 @@
 .list-group {
   .account_sum {
     font-size: 1.3em;
+    a {
+      font-size: 0.8em;
+    }
   }
   .help-block {
     margin-top: 0;
@@ -25,10 +28,13 @@
   }
 }
 
-.bill_item {
   .bill_value {
     font-size: 1.3em;
   }
   .bill_date {
   }
-}
+  .bill_item {
+    &.loading {
+      opacity: 0.8;
+    }
+  }

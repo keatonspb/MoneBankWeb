@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Account;
 use App\Bill;
+use App\CreditPay;
 use App\Reason;
 use Illuminate\Http\Request;
 
@@ -52,4 +54,40 @@ class ApiController extends Controller
         Bill::addBill($request->get("type"), $request->get("sum"), $request->get("sud_reason_id", $request->get("reason_id")), $request->get("description"), $request->get("credit", false));
         return true;
     }
+
+    protected function credit_pay(Request $request) {
+        CreditPay::pay($request->get("sum"));
+    }
+
+    protected function bill_info(Request $request) {
+        if(!$request->get("id")) {
+            throw new \Exception("Платеж не найден");
+        }
+        if(!$Bill = Bill::find($request->get("id"))) {
+            throw new \Exception("Платеж не найден");
+        }
+        $Account = Account::getCurrentAccount();
+        if($Bill->account_id != $Account->id) {
+            throw new \Exception("Это не ваш платеж!");
+        }
+        $Reason = Reason::find($Bill->reason_id);
+        $Bill['reason_name'] = $Reason->name;
+        return $Bill;
+    }
+
+    protected function delete_bill(Request $request) {
+        if(!$request->get("id")) {
+            throw new \Exception("Платеж не найден");
+        }
+        if(!$Bill = Bill::find($request->get("id"))) {
+            throw new \Exception("Платеж не найден");
+        }
+        $Account = Account::getCurrentAccount();
+        if($Bill->account_id != $Account->id) {
+            throw new \Exception("Это не ваш платеж!");
+        }
+        $Bill->deleteBill();
+
+    }
+
 }

@@ -1,41 +1,41 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
 /******/ 			l: false,
 /******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.l = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// identity function for calling harmony imports with the correct context
 /******/ 	__webpack_require__.i = function(value) { return value; };
-
+/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -46,7 +46,7 @@
 /******/ 			});
 /******/ 		}
 /******/ 	};
-
+/******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
 /******/ 	__webpack_require__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
@@ -55,13 +55,13 @@
 /******/ 		__webpack_require__.d(getter, 'a', getter);
 /******/ 		return getter;
 /******/ 	};
-
+/******/
 /******/ 	// Object.prototype.hasOwnProperty.call
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "./";
-
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 35);
 /******/ })
@@ -11172,11 +11172,14 @@ __webpack_require__(30);
  */
 
 $(document).ready(function () {
+    //Добавление затрат
     $(".add_bill").click(function () {
         if ($(this).data("role") == 'expense') {
             $(".add-bill-dialog .modal-title,.add-bill-dialog .btn-primary").html("Потратить");
+            $(".add-bill-dialog .credit_checkbox").show();
         } else {
             $(".add-bill-dialog .modal-title,.add-bill-dialog .btn-primary").html("Пополнить");
+            $(".add-bill-dialog .credit_checkbox").hide();
         }
         $(".add-bill-dialog input.bill_type").val($(this).data("role"));
         $(".parent_reason_select option").hide();
@@ -11214,6 +11217,64 @@ $(document).ready(function () {
             } else {
                 $(".bill_form .alert").html(json.message).show();
             }
+        }
+    });
+    /////////////////////////////////////////
+    // Платежи по кредиту
+    $(".add_credit_pay").click(function () {
+        $(".add-credit_pay-dialog").modal();
+    });
+    //Аjax формы
+    $(".ajaxform").ajaxForm({
+        beforeSubmit: function beforeSubmit() {
+            $(".ajaxform .alert").hide();
+            $(".ajaxform button").attr("disabled", "disabled");
+        },
+        dataType: "json",
+        error: function error() {
+            $(".ajaxform button").removeAttr("disabled", "disabled");
+            ".ajaxform .alert".html("Ошибка при отправке формы").show();
+        },
+        success: function success(json) {
+            $(".ajaxform button").removeAttr("disabled", "disabled");
+            if (json.success) {} else {
+                $(".ajaxform .alert").html(json.message).show();
+            }
+        }
+    });
+    //Просмотр счетов
+    $(".bill_item").click(function () {
+        if ($(this).hasClass("loading")) return;
+        $(this).addClass("loading");
+        $.getJSON($(this).attr("href"), function (json) {
+            $(this).remove("loading");
+            if (json.success) {
+                if (json.data.type == 'expense') {
+                    $(".add-bill_view-dialog .modal-title").html("Затрата");
+                } else {
+                    $(".add-bill_view-dialog .modal-title").html("Пополнение");
+                }
+                $(".add-bill_view-dialog .bill_value").html(json.data.value);
+                $(".add-bill_view-dialog .bill_date").html(json.data.created_at);
+                $(".add-bill_view-dialog .bill_reason").html(json.data.reason_name);
+                $(".add-bill_view-dialog .bill_description").html(json.data.description);
+                $(".add-bill_view-dialog .delete-bill").data("id", json.data.id);
+            }
+            $(".add-bill_view-dialog").modal();
+        });
+
+        return false;
+    });
+    //Удаление счета
+    $(".delete-bill").click(function () {
+        var id = $(this).data("id");
+        var button = $(this);
+        if (id) {
+            $(this).attr("disabled", "disabled");
+            $.getJSON("/api/delete_bill", { id: id }, function (json) {
+                button.removeAttr("disabled");
+                location.href = location.href;
+            });
         }
     });
 });

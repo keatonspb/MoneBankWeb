@@ -18,16 +18,19 @@ require('./components/jquery.form.min.js')
 
 
 $(document).ready(function () {
+    //Добавление затрат
     $(".add_bill").click(function () {
-        if($(this).data("role") == 'expense') {
+        if ($(this).data("role") == 'expense') {
             $(".add-bill-dialog .modal-title,.add-bill-dialog .btn-primary").html("Потратить");
+            $(".add-bill-dialog .credit_checkbox").show();
         } else {
             $(".add-bill-dialog .modal-title,.add-bill-dialog .btn-primary").html("Пополнить");
+            $(".add-bill-dialog .credit_checkbox").hide();
         }
         $(".add-bill-dialog input.bill_type").val($(this).data("role"));
         $(".parent_reason_select option").hide();
-        $(".parent_reason_select option."+$(this).data("role")).show();
-        $(".parent_reason_select option."+$(this).data("role")+":first").prop("selected", true);
+        $(".parent_reason_select option." + $(this).data("role")).show();
+        $(".parent_reason_select option." + $(this).data("role") + ":first").prop("selected", true);
         $(".add-bill-dialog").modal();
     });
     $(".parent_reason_select").change(function () {
@@ -55,7 +58,7 @@ $(document).ready(function () {
             dataType: "json",
             success: function (json) {
                 $(".bill_form button").removeAttr("disabled", "disabled");
-                if(json.success) {
+                if (json.success) {
                     location.href = location.href;
                 } else {
                     $(".bill_form .alert").html(json.message).show();
@@ -63,6 +66,68 @@ $(document).ready(function () {
             }
         }
     );
+    /////////////////////////////////////////
+    // Платежи по кредиту
+    $(".add_credit_pay").click(function () {
+        $(".add-credit_pay-dialog").modal();
+
+    });
+    //Аjax формы
+    $(".ajaxform").ajaxForm({
+            beforeSubmit: function () {
+                $(".ajaxform .alert").hide();
+                $(".ajaxform button").attr("disabled", "disabled");
+            },
+            dataType: "json",
+            error: function () {
+                $(".ajaxform button").removeAttr("disabled", "disabled");
+                (".ajaxform .alert").html("Ошибка при отправке формы").show();
+            },
+            success: function (json) {
+                $(".ajaxform button").removeAttr("disabled", "disabled");
+                if (json.success) {
+
+                } else {
+                    $(".ajaxform .alert").html(json.message).show();
+                }
+            }
+        }
+    );
+    //Просмотр счетов
+    $(".bill_item").click(function () {
+        if($(this).hasClass("loading")) return;
+        $(this).addClass("loading");
+       $.getJSON($(this).attr("href"), function (json) {
+            $(this).remove("loading");
+            if(json.success) {
+                if(json.data.type == 'expense') {
+                    $(".add-bill_view-dialog .modal-title").html("Затрата");
+                } else {
+                    $(".add-bill_view-dialog .modal-title").html("Пополнение");
+                }
+                $(".add-bill_view-dialog .bill_value").html(json.data.value);
+                $(".add-bill_view-dialog .bill_date").html(json.data.created_at);
+                $(".add-bill_view-dialog .bill_reason").html(json.data.reason_name);
+                $(".add-bill_view-dialog .bill_description").html(json.data.description);
+                $(".add-bill_view-dialog .delete-bill").data("id", json.data.id);
+            }
+            $(".add-bill_view-dialog").modal();
+       });
+
+       return false;
+    });
+    //Удаление счета
+    $(".delete-bill").click(function () {
+        var id = $(this).data("id");
+        var button = $(this);
+       if(id) {
+           $(this).attr("disabled","disabled");
+           $.getJSON("/api/delete_bill", {id: id}, function (json) {
+               button.removeAttr("disabled");
+               location.href = location.href;
+           });
+       }
+    });
 })
 
 

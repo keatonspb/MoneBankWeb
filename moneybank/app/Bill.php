@@ -48,4 +48,27 @@ class Bill extends Model
         }
     }
 
+    public function deleteBill() {
+        try {
+            DB::beginTransaction();
+            $Account = Account::getCurrentAccount();
+            if ($this->type == self::TYPE_EXPENSE) {
+                if ($this->credit) {
+                    $Account->credit = $Account->credit - $this->value;
+                } else {
+                    $Account->debit = $Account->debit + $this->value;
+                }
+            } else {
+                $Account->debit = $Account->debit - $this->value;
+            }
+            $Account->save();
+            $res = parent::delete();
+            DB::commit();
+            return $res;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
 }

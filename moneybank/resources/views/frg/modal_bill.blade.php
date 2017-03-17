@@ -16,7 +16,7 @@
                                 <label>Сумма</label>
                                 <input class="form-control" name="sum" value="0" type="number"/>
                             </div>
-                            <div class="checkbox">
+                            <div class="checkbox credit_checkbox">
                                 <label>
                                     <input type="checkbox" name="credit" value="1"> в кредит
                                 </label>
