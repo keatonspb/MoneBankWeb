@@ -26,7 +26,7 @@
 
                     </div>
 
-                    <a href="/bill/expenses" class="pull-right" style="margin: -10px 0 10px 0;">Все
+                    <a href="/bills?type=expense" class="pull-right" style="margin: -10px 0 10px 0;">Все
                         затраты</a>
 
 
@@ -51,8 +51,8 @@
 
                     </div>
 
-                    <a href="/bill/expenses" class="pull-right" style="margin: -10px 0 10px 0;">Все
-                        затраты</a>
+                    <a href="/bills?type=income" class="pull-right" style="margin: -10px 0 10px 0;">Все
+                        пополнения</a>
                 </div>
             </div>
         </div>

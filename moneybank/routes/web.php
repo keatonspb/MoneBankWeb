@@ -18,3 +18,5 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 
 Route::get('/api/{method}', 'ApiController@index');
+
+Route::get('/bills', 'BillController@index');

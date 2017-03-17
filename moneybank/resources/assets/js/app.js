@@ -7,6 +7,8 @@
 require('./bootstrap');
 
 require('./components/jquery.form.min.js')
+require('./components/datepicker/js/bootstrap-datepicker.js')
+require('./components/datepicker/locales/bootstrap-datepicker.ru.min')
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -18,6 +20,14 @@ require('./components/jquery.form.min.js')
 
 
 $(document).ready(function () {
+    $('.input-daterange').datepicker({
+        language: "ru",
+        orientation: "auto left",
+        autoclose: true,
+        todayBtn: true
+    });
+
+
     //Добавление затрат
     $(".add_bill").click(function () {
         if ($(this).data("role") == 'expense') {
