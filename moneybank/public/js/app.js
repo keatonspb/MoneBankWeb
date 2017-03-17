@@ -11237,7 +11237,9 @@ $(document).ready(function () {
         },
         success: function success(json) {
             $(".ajaxform button").removeAttr("disabled", "disabled");
-            if (json.success) {} else {
+            if (json.success) {
+                location.href = location.href;
+            } else {
                 $(".ajaxform .alert").html(json.message).show();
             }
         }

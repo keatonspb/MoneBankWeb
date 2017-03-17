@@ -22,6 +22,7 @@ class CreditPay extends Model
             DB::beginTransaction();
             $Account = Account::getCurrentAccount();
             $Account->credit = $Account->credit - $sum;
+            $Account->debit = $Account->debit - $sum;
             $Account->save();
             $CreditPay = CreditPay::create([
                 "value" => $sum,

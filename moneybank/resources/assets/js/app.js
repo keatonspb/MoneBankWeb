@@ -86,7 +86,7 @@ $(document).ready(function () {
             success: function (json) {
                 $(".ajaxform button").removeAttr("disabled", "disabled");
                 if (json.success) {
-
+                    location.href = location.href;
                 } else {
                     $(".ajaxform .alert").html(json.message).show();
                 }
