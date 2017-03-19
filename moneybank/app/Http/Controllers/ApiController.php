@@ -6,15 +6,22 @@ use App\Account;
 use App\Bill;
 use App\CreditPay;
 use App\Reason;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ApiController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+
     }
+
+
     public function index(Request $request, $method) {
+        if(!Auth::user() && $method != "login") {
+            abort(403, 'Unauthorized action.');
+        }
         if(method_exists($this, $method)) {
             $json = ["success"=>true];
             try {
@@ -24,7 +31,13 @@ class ApiController extends Controller
                 $json['message'] = $e->getMessage();
             }
             return response()->json($json);
+        } else {
+            abort(404, 'Not found');
         }
+    }
+
+    public function login(Request $request) {
+        Auth::login(User::find(1), true);
     }
 
 
@@ -88,6 +101,13 @@ class ApiController extends Controller
         }
         $Bill->deleteBill();
 
+    }
+
+    protected function bills(Request $request) {
+        $Account = Account::getCurrentAccount();
+        $Bills = Bill::where("account_id", $Account->id)->join('reasons', 'reason_id', '=', 'reasons.id')->select('bills.*', 'reasons.name as reason_name')->orderBy("created_at", "DESC");
+        $Bills->limit(30);
+        return ['list'=>$Bills->get(), 'credit' => round($Account->credit)];
     }
 
 }

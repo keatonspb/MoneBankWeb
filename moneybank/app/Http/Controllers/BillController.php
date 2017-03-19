@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use App\Account;
 use App\Bill;
+use App\Reason;
 use Illuminate\Http\Request;
 
 class BillController extends InnerPageController
@@ -38,6 +39,12 @@ class BillController extends InnerPageController
             $filter['type'] = $request->get("type");
             $Bills = $Bills->where("bills.type", "=", $request->get("type"));
         }
+        if($request->get("reason_id")) {
+            $filter['reason_id'] = $request->get("reason_id");
+            $reasons = Reason::where("id", $request->get("reason_id"))->orWhere("parent_id", $request->get("reason_id"));
+
+            $Bills = $Bills->whereIn("reason_id", $reasons->select("id")->get());
+        }
 
         $Expenses = clone $Bills;
         $Incomes = clone $Bills;
@@ -45,11 +52,14 @@ class BillController extends InnerPageController
         $allSum = $Incomes->where("bills.type", "=", "income")->sum("value") - $Expenses->where("bills.type", "=", "expense")->sum("value");
         $bills = $Bills->orderBy("created_at", "DESC")->paginate(20);
         $bills->appends($filter);
+
         return view('bills', [
             'Account'=>$Account,
             'rows' => $bills,
             'allSum' =>$allSum,
-            'filter' => $filter
+            'filter' => $filter,
+            'reasons' => $request->get("type") ?
+                Reason::whereNull('parent_id')->where("type", $request->get("type"))->get() : Reason::whereNull('parent_id')->get()
         ]);
     }
 }

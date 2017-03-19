@@ -20,6 +20,7 @@ class CreateReasonsTable extends Migration
             $table->foreign('parent_id')->references('id')->on('reasons')->onDelete('cascade');
             $table->enum('type', array('income', 'expense'));
             $table->string("name");
+            $table->integer("rating", false, true);
         });
     }
 

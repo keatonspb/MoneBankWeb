@@ -1,36 +1,46 @@
 @extends('layouts.app_inner')
 
 @section('content')
-    <div class="panel panel-default">
+    <div class="panel panel-default bills_filter">
         <div class="panel-heading">
             Фильтр
         </div>
         <div class="panel-body">
             <form>
-            <div class="row">
-                <div class="col-lg-4">
-                    <label for="filter_from">Дата</label>
-                    <div class="input-daterange input-group">
-                        <input type="text" class="form-control" name="start" value="{{$filter['start']}}" />
-                        <span class="input-group-addon"> &mdash; </span>
-                        <input type="text" class="form-control" name="end" value="{{$filter['end']}}" />
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label for="filter_from">Дата</label>
+                        <div class="input-daterange input-group">
+                            <input type="text" class="form-control" name="start" value="{{$filter['start']}}"/>
+                            <span class="input-group-addon"> &mdash; </span>
+                            <input type="text" class="form-control" name="end" value="{{$filter['end']}}"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <label for="filter_type">Тип</label>
+                        <select name="type" class="form-control" id="filter_type">
+                            <option value="0">Все</option>
+                            <option value="expense"
+                                    @if(isset($filter['type']) && $filter['type'] == 'expense') selected @endif>Затраты
+                            </option>
+                            <option value="income"
+                                    @if(isset($filter['type']) && $filter['type'] == 'income') selected @endif>
+                                Пополнения
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-lg-3 reasons">
+                        <label>Причина</label>
+                        <select class="form-control parent_reason_select" name="reason_id" multiple>
+                            @foreach($reasons as $reason)
+                                <option class="{{$reason->type}} hiddable" value="{{$reason->id}}" @if(isset($filter['reason_id']) && $filter['reason_id'] == $reason->id) selected @endif>{{$reason->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <button class="btn btn-primary">Применить</button>
                     </div>
                 </div>
-                <div class="col-lg-3">
-                    <label>Тип</label>
-                    <select name="type" class="form-control">
-                        <option value="0">Все</option>
-                        <option value="expense" @if(isset($filter['type']) && $filter['type'] == 'expense') selected @endif>Затраты</option>
-                        <option value="income" @if(isset($filter['type']) && $filter['type'] == 'income') selected @endif>Пополнения</option>
-                    </select>
-                </div>
-                <div class="col-lg-3">
-
-                </div>
-                <div class="col-lg-2">
-                    <button class="btn btn-primary">Применить</button>
-                </div>
-            </div>
             </form>
         </div>
     </div>
@@ -58,7 +68,8 @@
                             {{ number_format($row->value, 2, ".", " ") }}</td>
                         <td>{{$row->reason_name}}</td>
                         <td class="text-right">
-                            <a class="btn btn-default btn-sm bill_item" href="/api/bill_info?id={{$row->id}}">Просмотр</a>
+                            <a class="btn btn-default btn-sm bill_item"
+                               href="/api/bill_info?id={{$row->id}}">Просмотр</a>
                         </td>
                     </tr>
                 @endforeach
