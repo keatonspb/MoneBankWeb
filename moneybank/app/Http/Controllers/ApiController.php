@@ -50,7 +50,10 @@ class ApiController extends Controller
         if($request->get("type")) {
             $reasons = $reasons->where("type", $request->get("type"));
         }
-        $data = $reasons->get();
+        $data['list'] = $reasons->get();
+        if($request->get("with_popular")) {
+            $data['popular_expenses'] = Bill::getPopular();
+        }
         return $data;
     }
 
@@ -107,7 +110,7 @@ class ApiController extends Controller
         $Account = Account::getCurrentAccount();
         $Bills = Bill::where("account_id", $Account->id)->join('reasons', 'reason_id', '=', 'reasons.id')->select('bills.*', 'reasons.name as reason_name')->orderBy("created_at", "DESC");
         $Bills->limit(30);
-        return ['list'=>$Bills->get(), 'credit' => round($Account->credit)];
+        return ['list'=>$Bills->get(), 'credit' => round($Account->credit), 'debit' => round($Account->debit)];
     }
 
 }

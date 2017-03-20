@@ -23,6 +23,8 @@ class CreateBillsTable extends Migration
             $table->decimal("value", 10, 2);
             $table->boolean("credit")->default(false);
             $table->char("description")->nullable();
+            $table->decimal("lat", 10 ,8)->index();
+            $table->decimal("lng", 10 ,8)->index();
         });
     }
 

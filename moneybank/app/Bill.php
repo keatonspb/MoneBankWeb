@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Faker\Provider\DateTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -46,6 +47,21 @@ class Bill extends Model
             DB::rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * Попудярные затраты
+     * @param int $limit
+     */
+    public static function getPopular($limit = 3) {
+        $Date = new \DateTime("-1 month");
+        $Bills = self::where("created_at", ">", $Date->format("Y-m-d H:i:s"))->groupBy(['reason_id', 'value']);
+        $Bills->where("bills.type", self::TYPE_EXPENSE);
+        $Bills->join('reasons', 'reason_id', '=', 'reasons.id');
+        $Bills->select(["value", "name", "reason_id"]);
+        $Bills->limit($limit);
+        return $Bills->get();
+
     }
 
     public function deleteBill() {
