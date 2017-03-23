@@ -7,6 +7,7 @@ use App\Bill;
 use App\CreditPay;
 use App\Reason;
 use Illuminate\Foundation\Auth\User;
+use Illuminate\Foundation\Testing\HttpException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,6 +28,9 @@ class ApiController extends Controller
             try {
                 $json['data'] = $this->$method($request);
             } catch (\Exception $e) {
+                if($e->getCode() == 403) {
+                    abort(403, 'Unauthorized action.');
+                }
                 $json['success'] = false;
                 $json['message'] = $e->getMessage();
             }
@@ -67,7 +71,8 @@ class ApiController extends Controller
         if(!$request->get("type")) {
             throw new \Exception("Не указан тип");
         }
-        Bill::addBill($request->get("type"), $request->get("sum"), $request->get("sud_reason_id", $request->get("reason_id")), $request->get("description"), $request->get("credit", false));
+        Bill::addBill($request->get("type"), $request->get("sum"), $request->get("sud_reason_id", $request->get("reason_id")), $request->get("description"), $request->get("credit", false),
+            $request->get("lat", false), $request->get("lng", false));
         return true;
     }
 
@@ -93,7 +98,8 @@ class ApiController extends Controller
 
     protected function delete_bill(Request $request) {
         if(!$request->get("id")) {
-            throw new \Exception("Платеж не найден");
+            throw new \Exception("
+             не найден");
         }
         if(!$Bill = Bill::find($request->get("id"))) {
             throw new \Exception("Платеж не найден");

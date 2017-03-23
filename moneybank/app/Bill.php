@@ -12,12 +12,12 @@ use Illuminate\Support\Facades\DB;
 class Bill extends Model
 {
     protected $fillable = [
-        'type', 'account_id', 'user_id', 'reason_id','description', 'credit','value'
+        'type', 'account_id', 'user_id', 'reason_id','description', 'credit','value', 'lat', 'lng'
     ];
     const TYPE_EXPENSE = "expense";
     const TYPE_INCOME = "income";
 
-    public static function addBill($type, $sum, $reason_id, $desc, $inCredit = false)
+    public static function addBill($type, $sum, $reason_id, $desc, $inCredit = false, $lat = null, $lng = null)
     {
         try {
             DB::beginTransaction();
@@ -32,6 +32,17 @@ class Bill extends Model
                 $Account->debit = $Account->debit + $sum;
             }
             $Account->save();
+            $row = [
+                "value" => $sum,
+                "type" => $type,
+                "account_id" => $Account->id,
+                "user_id" => Auth::user()->id,
+                "reason_id" => $reason_id,
+                "description" => $desc,
+                "credit" => $inCredit,
+                "lat"=>$lat,
+                "lng"=>$lng
+            ];
              $Bill = Bill::create([
                 "value" => $sum,
                 "type" => $type,
@@ -39,7 +50,9 @@ class Bill extends Model
                 "user_id" => Auth::user()->id,
                 "reason_id" => $reason_id,
                 "description" => $desc,
-                "credit" => $inCredit
+                "credit" => $inCredit,
+                 "lat"=>$lat,
+                 "lng"=>$lng
             ]);
             DB::commit();
             return $Bill;
