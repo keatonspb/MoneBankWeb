@@ -61,4 +61,6 @@
     @include('frg/modal_bill')
     @include('frg/modal_credit_pay')
     @include('frg/modal_bill_view')
+    @include('frg/expensemap')
+
 @endsection

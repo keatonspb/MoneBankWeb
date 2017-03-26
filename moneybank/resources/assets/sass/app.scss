@@ -1,14 +1,10 @@
-
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700');
-
 // Variables
 @import "variables";
-
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 @import "../js/components/datepicker/css/bootstrap-datepicker3.min.css";
-
 
 .reasons {
   .sub_reason {
@@ -30,13 +26,19 @@
   }
 }
 
-  .bill_value {
-    font-size: 1.3em;
+.bill_value {
+  font-size: 1.3em;
+}
+
+.bill_date {
+}
+
+.bill_item {
+  &.loading {
+    opacity: 0.8;
   }
-  .bill_date {
-  }
-  .bill_item {
-    &.loading {
-      opacity: 0.8;
-    }
-  }
+}
+
+#expensemap {
+  height: 300px;
+}
