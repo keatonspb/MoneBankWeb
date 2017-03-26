@@ -20,7 +20,7 @@ class StatDaily extends Command
 
         foreach ($Accounts as $account) {
             $Date = new \DateTime();
-            echo $Date->format("Y-m-d 23:59:59");
+            echo $Date->format("Y-m-d H:m:s");
             $row = [
                 'date'=>$Date->format("Y-m-d"),
                 'debit'=>$account->debit,
