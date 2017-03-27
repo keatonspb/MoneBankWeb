@@ -1,1 +1,4 @@
 .idea/
+.vagrant/
+vendor/
+moneybank/npm-debug.log
