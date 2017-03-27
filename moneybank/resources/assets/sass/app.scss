@@ -6,6 +6,7 @@
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 @import "../js/components/datepicker/css/bootstrap-datepicker3.min.css";
 
+$imagedir:'/css/img/';
 .reasons {
   .sub_reason {
     display: none;
@@ -44,7 +45,8 @@
 }
 
 .chart {
-  ul {
-    display: none;
+  background: url("#{$imagedir}/loading.svg") no-repeat center;
+  &.filled {
+    background: none;
   }
 }

@@ -15,37 +15,7 @@ require('chart.js')
 
 $(document).ready(function () {
     //Charts
-    $(".chart").each(function () {
-        ctx = $("canvas", this);
-        data = [];
-        labels = [];
-        $("ul li", this).each(function () {
-            data.push($(this).html());
-            labels.push($(this).data("label"));
-        });
-        console.info(data);
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: "",
-                        data: data
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    xAxes: [{
-                        type: 'linear',
-                        position: 'bottom'
-                    }]
-                }
-            }
-        });
-
-    });
+    require('./money_charts')
 
 
     $('.input-daterange').datepicker({

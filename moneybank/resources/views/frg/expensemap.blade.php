@@ -16,7 +16,7 @@
             new google.maps.Marker({
             position: {lat: {{$expense->lat}}, lng: {{$expense->lng}}},
             map: map,
-            title: '{{$expense->reason_name}}'
+            title: '{{$expense->reason_name}} - {{$expense->value}}'
         });
         @endforeach
     }

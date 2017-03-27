@@ -6,6 +6,7 @@ use App\Account;
 use App\Bill;
 use App\CreditPay;
 use App\Reason;
+use App\StatisticDaily;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Foundation\Testing\HttpException;
 use Illuminate\Http\Request;
@@ -117,6 +118,44 @@ class ApiController extends Controller
         $Bills = Bill::where("account_id", $Account->id)->join('reasons', 'reason_id', '=', 'reasons.id')->select('bills.*', 'reasons.name as reason_name')->orderBy("created_at", "DESC");
         $Bills->limit(30);
         return ['list'=>$Bills->get(), 'credit' => round($Account->credit), 'debit' => round($Account->debit)];
+    }
+
+    /**
+     * Ежедневная статистика
+     * @param int $days
+     * @return array
+     */
+    protected function dayly_stats($days = 30) {
+        $stats = StatisticDaily::where("date", ">", (new \DateTime("-30 days"))->format("Y-m-d 00:00:00"))->get();
+        $data = [
+            "labels" => [],
+            "datasets" => [
+
+            ]
+        ];
+        $debit = [];
+        $expense = [];
+        foreach ($stats as $stat) {
+            $data['labels'][] = $stat->date;
+            $debit[] = $stat->debit;
+            $expense[] = $stat->expense;
+        }
+
+        $data['datasets'][] = [
+            "label" => "Затраты",
+            "fill"=>false,
+            "borderColor"=>"#bf5329",
+            "backgroundColor" => "#bf5329",
+            "data" => $expense
+        ];
+        $data['datasets'][] = [
+            "label" => "Состояние счета",
+            "fill"=>true,
+            "borderColor"=>"#2ab27b",
+            "backgroundColor"=>"rgba(42,178,123,0.5)",
+            "data" => $debit
+        ];
+        return $data;
     }
 
 }

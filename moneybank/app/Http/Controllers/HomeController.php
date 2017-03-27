@@ -42,7 +42,6 @@ class HomeController extends InnerPageController
                 ->whereNotNull("lat")
                 ->join('reasons', 'reason_id', '=', 'reasons.id')
                 ->select('bills.*', 'reasons.name as reason_name')->orderBy("created_at", "DESC")->get(),
-            'account_stat' => StatisticDaily::where("date", ">", (new \DateTime("-30 days"))->format("Y-m-d 00:00:00"))->get(),
         ]);
     }
 }
