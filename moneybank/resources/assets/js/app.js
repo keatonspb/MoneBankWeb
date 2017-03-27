@@ -9,17 +9,45 @@ require('./bootstrap');
 require('./components/jquery.form.min.js')
 require('./components/datepicker/js/bootstrap-datepicker.js')
 require('./components/datepicker/locales/bootstrap-datepicker.ru.min')
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
+require('chart.js')
 
 
 
 $(document).ready(function () {
+    //Charts
+    $(".chart").each(function () {
+        ctx = $("canvas", this);
+        data = [];
+        labels = [];
+        $("ul li", this).each(function () {
+            data.push($(this).html());
+            labels.push($(this).data("label"));
+        });
+        console.info(data);
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "",
+                        data: data
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        type: 'linear',
+                        position: 'bottom'
+                    }]
+                }
+            }
+        });
+
+    });
+
+
     $('.input-daterange').datepicker({
         language: "ru",
         orientation: "auto left",
@@ -140,6 +168,8 @@ $(document).ready(function () {
     });
 
 
-})
+
+
+});
 
 
