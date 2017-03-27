@@ -9,6 +9,7 @@ class StatisticDaily extends Model
 {
     protected $table = "statistic_daily";
     public $timestamps = false;
+    protected $primaryKey = 'date';
     protected $fillable = [
         'date', 'debit', 'credit', 'income', 'expense'
     ];

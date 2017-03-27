@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Account;
 use App\Bill;
+use App\Console\Commands\StatDaily;
 use App\Reason;
+use App\StatisticDaily;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,7 +41,8 @@ class HomeController extends InnerPageController
                 ->where("bills.created_at", ">", (new \DateTime("-1 week"))->format("Y-m-d 00:00:00"))
                 ->whereNotNull("lat")
                 ->join('reasons', 'reason_id', '=', 'reasons.id')
-                ->select('bills.*', 'reasons.name as reason_name')->orderBy("created_at", "DESC")->get()
+                ->select('bills.*', 'reasons.name as reason_name')->orderBy("created_at", "DESC")->get(),
+            'account_stat' => StatisticDaily::where("date", ">", (new \DateTime("-30 days"))->format("Y-m-d 00:00:00"))->get(),
         ]);
     }
 }
