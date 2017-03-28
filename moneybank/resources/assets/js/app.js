@@ -42,12 +42,14 @@ $(document).ready(function () {
         $(".add-bill-dialog").modal();
     });
     $(".parent_reason_select").change(function () {
+
         var sub_select = $(this).siblings("select.sub_reason").first();
         if (sub_select.length) {
             sub_select.html("");
             $.getJSON("/api/reasons", {type: $(this).data("type"), parent_id: $(this).val()}, function (json) {
-                if (json.data && json.data.length) {
-                    json.data.forEach(function (el) {
+                console.info(json);
+                if (json.data && json.data.list && json.data.list.length) {
+                    json.data.list.forEach(function (el) {
                         sub_select.append("<option value='" + el.id + "'>" + el.name + "</option>");
                     });
                     sub_select.show();
@@ -94,7 +96,7 @@ $(document).ready(function () {
             success: function (json) {
                 $(".ajaxform button").removeAttr("disabled", "disabled");
                 if (json.success) {
-                    location.href = location.href;
+                    // location.href = location.href;
                 } else {
                     $(".ajaxform .alert").html(json.message).show();
                 }
@@ -103,10 +105,11 @@ $(document).ready(function () {
     );
     //Просмотр счетов
     $(".bill_item").click(function () {
-        if($(this).hasClass("loading")) return;
+        if($(this).hasClass("loading")) return false;
         $(this).addClass("loading");
+        var that = this;
        $.getJSON($(this).attr("href"), function (json) {
-            $(this).remove("loading");
+            $(that).removeClass("loading");
             if(json.success) {
                 if(json.data.type == 'expense') {
                     $(".add-bill_view-dialog .modal-title").html("Затрата");

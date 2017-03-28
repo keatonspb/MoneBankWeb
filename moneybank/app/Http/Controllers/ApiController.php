@@ -72,7 +72,7 @@ class ApiController extends Controller
         if(!$request->get("type")) {
             throw new \Exception("Не указан тип");
         }
-        Bill::addBill($request->get("type"), $request->get("sum"), $request->get("sud_reason_id", $request->get("reason_id")), $request->get("description"), $request->get("credit", false),
+        Bill::addBill($request->get("type"), $request->get("sum"), $request->get("sub_reason_id", $request->get("reason_id")), $request->get("description"), $request->get("credit", false),
             $request->get("lat", false), $request->get("lng", false));
         return true;
     }

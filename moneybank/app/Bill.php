@@ -32,17 +32,7 @@ class Bill extends Model
                 $Account->debit = $Account->debit + $sum;
             }
             $Account->save();
-            $row = [
-                "value" => $sum,
-                "type" => $type,
-                "account_id" => $Account->id,
-                "user_id" => Auth::user()->id,
-                "reason_id" => $reason_id,
-                "description" => $desc,
-                "credit" => $inCredit,
-                "lat"=>$lat,
-                "lng"=>$lng
-            ];
+
              $Bill = Bill::create([
                 "value" => $sum,
                 "type" => $type,
