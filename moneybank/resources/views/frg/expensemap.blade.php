@@ -1,3 +1,4 @@
+@if($map_center)
 <div class="panel panel-default">
     <div class="panel-heading">Карта затрат</div>
     <div id="expensemap"></div>
@@ -9,8 +10,9 @@
     var map;
     function initMap() {
         var map = new google.maps.Map(document.getElementById('expensemap'), {
-            center: {lat: 60.20807303, lng: 30.01146776},
-            zoom: 8
+
+            center: {lat: {{$map_center->lat}}, lng: {{$map_center->lng}}},
+            zoom: 10
         });
         @foreach($last_week_expense as $expense)
             new google.maps.Marker({
@@ -25,4 +27,5 @@
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAfl7fE1Xmr_N7omHlZ2FNsmRWk_KajtSo&callback=initMap">
 </script>
+@endif
 

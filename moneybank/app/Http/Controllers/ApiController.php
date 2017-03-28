@@ -73,7 +73,7 @@ class ApiController extends Controller
             throw new \Exception("Не указан тип");
         }
         Bill::addBill($request->get("type"), $request->get("sum"), $request->get("sub_reason_id", $request->get("reason_id")), $request->get("description"), $request->get("credit", false),
-            $request->get("lat", false), $request->get("lng", false));
+            $request->get("lat", null), $request->get("lng", null));
         return true;
     }
 
@@ -129,14 +129,15 @@ class ApiController extends Controller
         $stats = StatisticDaily::where("date", ">", (new \DateTime("-30 days"))->format("Y-m-d 00:00:00"))->get();
         $data = [
             "labels" => [],
+            "min" => 0,
             "datasets" => [
 
-            ]
+            ],
         ];
         $debit = [];
         $expense = [];
         foreach ($stats as $stat) {
-            $data['labels'][] = $stat->date;
+            $data['labels'][] = (new \DateTime($stat->date))->format("d-m");
             $debit[] = $stat->debit;
             $expense[] = $stat->expense;
         }

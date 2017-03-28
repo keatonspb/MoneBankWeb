@@ -29928,6 +29928,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /* WEBPACK VAR INJECTION */(function($) {/**
  * Created by default on 27.03.2017.
  */
+
+Chart.defaults.global.fontFamily = "'Open Sans', sans-serif";
+Chart.defaults.global.fontColor = "#333333";
+
 if ($(".chart").length) {
     $(".chart").each(function () {
 

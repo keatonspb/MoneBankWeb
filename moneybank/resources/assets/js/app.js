@@ -25,7 +25,6 @@ $(document).ready(function () {
         todayBtn: true
     });
 
-
     //Добавление затрат
     $(".add_bill").click(function () {
         if ($(this).data("role") == 'expense') {
