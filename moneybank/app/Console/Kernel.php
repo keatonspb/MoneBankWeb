@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\StatDaily::class,
+        \App\Console\Commands\RatingRecalc::class,
     ];
 
     /**
@@ -26,6 +27,8 @@ class Kernel extends ConsoleKernel
     {
          $schedule->command('dailystat:make')
              ->hourly();
+        $schedule->command('rating:make')
+            ->hourly();
     }
 
     /**
